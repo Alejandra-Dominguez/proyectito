@@ -1,8 +1,7 @@
 <?php
-$db = new PDO(
-    "mysql:dbname=controlgastos",
-    "root",
-    ""    
-);
+$host = 'localhost';
+$db   = 'gastos_familiares';
+$user = 'root';
+$charset = 'utf8mb4';
 ?>
 
