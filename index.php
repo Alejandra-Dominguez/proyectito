@@ -1,5 +1,5 @@
 <?php
-    require 'db.php';
+    require_once 'db.php';
     /*busca en la base de datos*/
     $busqueda = $_GET['busqueda'] ?? '';
     $param = "%busqueda%";
@@ -8,7 +8,7 @@
     $stmt ->execute([$param, $param]);
     $gastos = $stmt->fetchAll();
 
-    $total = array_sum(array_colum($gastos, 'valor'));
+    $total = array_sum(array_column($gastos, 'valor'));
 ?>
 
 <!DOCTYPE html>
