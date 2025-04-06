@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-    /*busca en la base de datos*/
+    /*Busca en la base de datos*/
     $busqueda = $_GET['busqueda'] ?? '';
     $param = "%$busqueda%";
     
@@ -47,16 +47,27 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($gastos as $g): ?>
+            <?php foreach ($gastos as $g): ?>
 
-            <tr>
-                <td><?= htmlspecialchars($g['nombre']) ?></td>
-                <td><?= htmlspecialchars($g['tipo']) ?></td>
-                <td>$<?= number_format($g['valor'], 2) ?></td>
-                <td>
-                    <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este gasto?')">Eliminar</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
+                <tr>
+                    <td><?= htmlspecialchars($g['nombre']) ?></td>
+                    <td><?= htmlspecialchars($g['tipo']) ?></td>
+                    <td>$<?= number_format($g['valor'], 2) ?></td>
+                    <td>
+                        <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este gasto?')">Eliminar</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
+ 
+        <tfoot>
+            <tr>
+                <th colspan="2">Total</th>
+                <th colspan="2">$<?= number_format($total, 2) ?></th>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
+

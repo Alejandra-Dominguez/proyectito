@@ -41,3 +41,23 @@
             </ul>
         </div>
     <?php endif; ?>
+
+    <form method="post" class="mt-3">
+        <div class="mb-3">
+            <label>Nombre de la persona</label>
+            <input type="text" name="nombre" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label>Tipo de gasto</label>
+            <select name="tipo" class="form-control">
+                <option value="">Selecciona uno</option>
+                <option value="Alimentación">Alimentación</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Salud">Salud</option>
+                <option value="Entretenimiento">Entretenimiento</option>
+                <option value="Impuestos">Impuestos</option>
+                <option value="Viajes">Viajes</option>
+                <option value="Educación">Educación</option>
+                <option value="Otros">Otros</option>
+            </select>
+        </div>
