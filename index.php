@@ -48,7 +48,7 @@
                 <tr>
                     <td><?= htmlspecialchars($g['nombre']) ?></td>
                     <td><?= htmlspecialchars($g['tipo']) ?></td>
-                    <td>$<?= number_format($g['valor'], 2) ?></td>
+                    <td>L<?= number_format($g['valor'], 2) ?></td>
                     <td>
                         <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
                         <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este gasto?')">Eliminar</a>
@@ -60,7 +60,7 @@
         <tfoot>
             <tr>
                 <th colspan="2">Total</th>
-                <th colspan="2">$<?= number_format($total, 2) ?></th>
+                <th colspan="2">L<?= number_format($total, 2) ?></th>
             </tr>
         </tfoot>
     </table>
@@ -74,16 +74,28 @@
       icon: "success",
       confirmButtonText: "Aceptar"
     });
-
-    // Limpia el parámetro ?success=1 de la URL sin recargar
     if (window.history.replaceState) {
       const url = new URL(window.location);
       url.searchParams.delete('success');
-      window.history.replaceState({}, document.title, url.pathname);
+      window.history.replaceState({}, document.title, url.pathname + url.search);
+    }
+  </script>
+<?php elseif (isset($_GET['editado']) && $_GET['editado'] == 1): ?>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      title: "¡Edición exitosa!",
+      text: "El gasto ha sido actualizado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar"
+    });
+    if (window.history.replaceState) {
+      const url = new URL(window.location);
+      url.searchParams.delete('editado');
+      window.history.replaceState({}, document.title, url.pathname + url.search);
     }
   </script>
 <?php endif; ?>
-
 </body>
 </html>
 
