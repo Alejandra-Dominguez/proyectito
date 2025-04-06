@@ -32,11 +32,7 @@
     </form>
 
     <a href="agregar.php" class="btn btn-success mb-3">Agregar nuevo gasto</a>
-    <?php if (!empty($_GET['success'])): ?>
-        <div class="alert alert-success">Gasto registrado exitosamente.</div>
-    <?php endif; ?>
-
-
+   
     <table class="table table-bordered">
         <thead class="table-dark">
             <tr>
@@ -68,6 +64,26 @@
             </tr>
         </tfoot>
     </table>
+
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      title: "¡Registro exitoso!",
+      text: "El gasto se ha guardado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar"
+    });
+
+    // Limpia el parámetro ?success=1 de la URL sin recargar
+    if (window.history.replaceState) {
+      const url = new URL(window.location);
+      url.searchParams.delete('success');
+      window.history.replaceState({}, document.title, url.pathname);
+    }
+  </script>
+<?php endif; ?>
+
 </body>
 </html>
 
