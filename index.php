@@ -28,3 +28,27 @@
         <div class="alert alert-success">Gasto registrado exitosamente.</div>
     <?php endif; ?>
 
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Tipo</th>
+            <th class="text-center">Valor</th>
+            <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($gastos as $g): ?>
+
+            <tr>
+                <td><?= htmlspecialchars($g['nombre']) ?></td>
+                <td><?= htmlspecialchars($g['tipo']) ?></td>
+                <td>$<?= number_format($g['valor'], 2) ?></td>
+                <td>
+                    <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este gasto?')">Eliminar</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
