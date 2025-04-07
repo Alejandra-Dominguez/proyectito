@@ -15,11 +15,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = $_POST['nombre'] ?? '';
     $tipo = $_POST['tipo'] ?? '';
     $valor = $_POST['valor'] ?? 0;
+    $fecha = $_POST['fecha'] ?? '';
 
     if ($nombre && $tipo && is_numeric($valor) && $valor > 0) {
-        $stmt = $pdo->prepare("UPDATE gastos SET nombre = ?, tipo = ?, valor = ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE gastos SET nombre = ?, tipo = ?, valor = ?, fecha = ?  WHERE id = ?");
         /**sustituye los ? por los valores reales */
-        $stmt->execute([$nombre, $tipo, $valor, $id]);
+        $stmt->execute([$nombre, $tipo, $valor,$fecha, $id]);
         /**redirecciona al usuario a index.php */
         header("Location: index.php?editado=1");
         exit;
@@ -51,6 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label>Valor</label>
             <input type="number" step="0.01" name="valor" class="form-control" value="<?= $gasto['valor'] ?>">
         </div>
+        <div class="mb-3">
+            <label>Fecha</label>
+            <input type="date" name="fecha" class="form-control" value="<?= isset($gasto['fecha']) ? $gasto['fecha'] : '' ?>">
+        </div>
+
         <button class="btn btn-primary">Guardar Cambios</button>
         <a href="index.php" class="btn btn-secondary">Cancelar</a>
     </form>

@@ -9,6 +9,7 @@
     $nombre = trim($_POST['nombre'] ?? '');
     $tipo = $_POST['tipo'] ?? '';
     $valor = $_POST['valor'] ?? '';
+    $fecha = $_POST['fecha'] ?? '';
 
     /**Validaciones  */
     if (empty($nombre)) $errores[] = "El nombre es obligatorio.";
@@ -17,8 +18,8 @@
 
     /**Si no hay errores, inserta los datos en bd */
     if (empty($errores)) {
-        $stmt = $pdo->prepare("INSERT INTO gastos (nombre, tipo, valor) VALUES (?, ?, ?)");
-        $stmt->execute([$nombre, $tipo, $valor]);
+        $stmt = $pdo->prepare("INSERT INTO gastos (nombre, tipo, valor, fecha) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$nombre, $tipo, $valor, $fecha]);
         header("Location: index.php?success=1");
         exit;
     }
@@ -85,19 +86,23 @@
                             <option value="Otros">Otros</option>
                         </select>
                     </div>
+                    <form method="post">
+                    
+                        <div class="mb-3">
+                            <label>Valor</label>
+                            <input type="number" name="valor" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Fecha</label>
+                            <input type="date" name="fecha" class="form-control" required>
+                        </div>
 
-                    <!-- Valor -->
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Valor del gasto</label>
-                        <input type="number" step="0.01" name="valor" class="form-control form-control-lg rounded-3">
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-primary btn-lg px-4">Registrar</button>
-                        <a href="index.php" class="btn btn-outline-secondary btn-lg px-4">Volver</a>
-                    </div>
-                </form>
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary btn-lg px-4">Registrar</button>
+                            <a href="index.php" class="btn btn-outline-secondary btn-lg px-4">Volver</a>
+                        </div>
+                    </form>
             </div>
         </div>
     </div>

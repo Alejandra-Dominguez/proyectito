@@ -4,8 +4,11 @@
     $busqueda = $_GET['busqueda'] ?? '';
     $param = "%$busqueda%";
     
-    $stmt = $pdo->prepare("SELECT * FROM gastos WHERE nombre LIKE ? or tipo LIKE ? ORDER BY fecha DESC");
-    $stmt ->execute([$param, $param]);
+    $stmt = $pdo->prepare("SELECT * FROM gastos 
+    WHERE nombre LIKE ? OR tipo LIKE ? OR valor LIKE ? OR fecha LIKE ? 
+    ORDER BY fecha DESC");
+    $stmt->execute([$param, $param, $param, $param]); 
+
     $gastos = $stmt->fetchAll();
 
     $total = array_sum(array_column($gastos, 'valor'));
@@ -26,7 +29,7 @@
             <span class="input-group-text"> 
             <i class="bi bi-search"></i>
             </span>
-            <input type="text" name="busqueda" class="form-control" placeholder="Buscar por nombre o tipo" value="<?= htmlspecialchars($busqueda) ?>">
+            <input type="text" name="busqueda" class="form-control" placeholder="Busca por nombre, tipo, valor o fecha" value="<?= htmlspecialchars($busqueda) ?>">
             <button class="btn btn-success" type="submit">Buscar</button>
         </div>
     </form>
@@ -39,6 +42,7 @@
             <th class="text-center">Nombre</th>
             <th class="text-center">Tipo</th>
             <th class="text-center">Valor</th>
+            <th class="text-center">Fecha</th>
             <th class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -49,6 +53,7 @@
                     <td><?= htmlspecialchars($g['nombre']) ?></td>
                     <td><?= htmlspecialchars($g['tipo']) ?></td>
                     <td>L<?= number_format($g['valor'], 2) ?></td>
+                    <td><?= htmlspecialchars($g['fecha']) ?></td>
                     <td>
                         <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
                         <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este gasto?')">Eliminar</a>
