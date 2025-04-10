@@ -1,17 +1,17 @@
 <?php
-    require_once 'db.php';
-    /*Busca en la base de datos*/
-    $busqueda = $_GET['busqueda'] ?? '';
-    $param = "%$busqueda%";
-    
-    $stmt = $pdo->prepare("SELECT * FROM gastos 
-    WHERE nombre LIKE ? OR tipo LIKE ? OR valor LIKE ? OR fecha LIKE ? 
-    ORDER BY fecha DESC");
-    $stmt->execute([$param, $param, $param, $param]); 
+require_once 'db.php';
+// Busca en la base de datos
+$busqueda = $_GET['busqueda'] ?? '';
+$param = "%$busqueda%";
 
-    $gastos = $stmt->fetchAll();
+$stmt = $pdo->prepare("SELECT * FROM gastos 
+WHERE nombre LIKE ? OR tipo LIKE ? OR valor LIKE ? OR fecha LIKE ? 
+ORDER BY fecha DESC");
+$stmt->execute([$param, $param, $param, $param]); 
 
-    $total = array_sum(array_column($gastos, 'valor'));
+$gastos = $stmt->fetchAll();
+
+$total = array_sum(array_column($gastos, 'valor'));
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +21,7 @@
     <title>Lista de Gastos</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="container py-4">
     <h1>Gastos Familiares</h1>
@@ -48,7 +49,6 @@
         </thead>
         <tbody>
             <?php foreach ($gastos as $g): ?>
-
                 <tr>
                     <td><?= htmlspecialchars($g['nombre']) ?></td>
                     <td><?= htmlspecialchars($g['tipo']) ?></td>
@@ -56,7 +56,7 @@
                     <td><?= htmlspecialchars($g['fecha']) ?></td>
                     <td>
                         <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este gasto?')">Eliminar</a>
+                        <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -70,37 +70,36 @@
         </tfoot>
     </table>
 
+    <!-- Alerta de registro exitoso -->
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    Swal.fire({
-      title: "¡Registro exitoso!",
-      text: "El gasto se ha guardado correctamente.",
-      icon: "success",
-      confirmButtonText: "Aceptar"
-    });
-    if (window.history.replaceState) {
-      const url = new URL(window.location);
-      url.searchParams.delete('success');
-      window.history.replaceState({}, document.title, url.pathname + url.search);
-    }
-  </script>
-<?php elseif (isset($_GET['editado']) && $_GET['editado'] == 1): ?>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    Swal.fire({
-      title: "¡Edición exitosa!",
-      text: "El gasto ha sido actualizado correctamente.",
-      icon: "success",
-      confirmButtonText: "Aceptar"
-    });
-    if (window.history.replaceState) {
-      const url = new URL(window.location);
-      url.searchParams.delete('editado');
-      window.history.replaceState({}, document.title, url.pathname + url.search);
-    }
-  </script>
-<?php endif; ?>
+    <script>
+        Swal.fire({
+            title: "¡Registro exitoso!",
+            text: "El gasto se ha guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar"
+        });
+    </script>
+    <?php elseif (isset($_GET['editado']) && $_GET['editado'] == 1): ?>
+    <!-- Alerta de edición exitosa -->
+    <script>
+        Swal.fire({
+            title: "¡Edición exitosa!",
+            text: "El gasto ha sido actualizado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar"
+        });
+    </script>
+    <?php elseif (isset($_GET['borrado']) && $_GET['borrado'] == 1): ?>
+    <!-- Alerta de eliminación exitosa -->
+    <script>
+        Swal.fire({
+            title: "¡Gasto eliminado!",
+            text: "El gasto ha sido eliminado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar"
+        });
+    </script>
+    <?php endif; ?>
 </body>
 </html>
-
