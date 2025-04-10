@@ -1,17 +1,16 @@
 <?php
-require_once 'db.php';
+require 'db.php';
 // Busca en la base de datos
 $busqueda = $_GET['busqueda'] ?? '';
 $param = "%$busqueda%";
 
 $stmt = $pdo->prepare("SELECT * FROM gastos 
-WHERE nombre LIKE ? OR tipo LIKE ? OR valor LIKE ? OR fecha LIKE ? 
-ORDER BY fecha DESC");
-$stmt->execute([$param, $param, $param, $param]); 
+WHERE nombre LIKE ? OR tipoGasto LIKE ? OR valorGasto LIKE ? ORDER BY codigoGasto DESC");
+$stmt->execute([$param, $param, $param]); 
 
 $gastos = $stmt->fetchAll();
 
-$total = array_sum(array_column($gastos, 'valor'));
+$total = array_sum(array_column($gastos, 'valorGasto'));
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +29,7 @@ $total = array_sum(array_column($gastos, 'valor'));
             <span class="input-group-text"> 
             <i class="bi bi-search"></i>
             </span>
-            <input type="text" name="busqueda" class="form-control" placeholder="Busca por nombre, tipo, valor o fecha" value="<?= htmlspecialchars($busqueda) ?>">
+            <input type="text" name="busqueda" class="form-control" placeholder="Busca por nombre, tipo o valor" value="<?= htmlspecialchars($busqueda) ?>">
             <button class="btn btn-success" type="submit">Buscar</button>
         </div>
     </form>
@@ -43,7 +42,6 @@ $total = array_sum(array_column($gastos, 'valor'));
             <th class="text-center">Nombre</th>
             <th class="text-center">Tipo</th>
             <th class="text-center">Valor</th>
-            <th class="text-center">Fecha</th>
             <th class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -51,12 +49,11 @@ $total = array_sum(array_column($gastos, 'valor'));
             <?php foreach ($gastos as $g): ?>
                 <tr>
                     <td><?= htmlspecialchars($g['nombre']) ?></td>
-                    <td><?= htmlspecialchars($g['tipo']) ?></td>
-                    <td>L<?= number_format($g['valor'], 2) ?></td>
-                    <td><?= htmlspecialchars($g['fecha']) ?></td>
+                    <td><?= htmlspecialchars($g['tipoGasto']) ?></td>
+                    <td>L<?= number_format($g['valorGasto'], 2) ?></td>
                     <td>
-                        <a href="editar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="eliminar.php?id=<?= $g['id'] ?>" class="btn btn-sm btn-danger">Eliminar</a>
+                        <a href="editar.php?codigoGasto=<?= $g['codigoGasto'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="eliminar.php?codigoGasto=<?= $g['codigoGasto'] ?>" class="btn btn-sm btn-danger">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -65,7 +62,7 @@ $total = array_sum(array_column($gastos, 'valor'));
         <tfoot>
             <tr>
                 <th colspan="2">Total</th>
-                <th colspan="2">L<?= number_format($total, 2) ?></th>
+                <th>L<?= number_format($total, 2) ?></th>
             </tr>
         </tfoot>
     </table>

@@ -1,25 +1,24 @@
 <?php
- require 'db.php';
+require 'db.php';
 
- /*En caso de errores en el formulario*/
- $errores = [];
+/*En caso de errores en el formulario*/
+$errores = [];
 
- /**Verificacion por metodo post*/
- if ($_SERVER["REQUEST_METHOD"] === "POST") {
+/**Verificacion por metodo post*/
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = trim($_POST['nombre'] ?? '');
-    $tipo = $_POST['tipo'] ?? '';
-    $valor = $_POST['valor'] ?? '';
-    $fecha = $_POST['fecha'] ?? '';
+    $tipoGasto = $_POST['tipoGasto'] ?? '';
+    $valorGasto = $_POST['valorGasto'] ?? '';
 
     /**Validaciones  */
     if (empty($nombre)) $errores[] = "El nombre es obligatorio.";
-    if (empty($tipo)) $errores[] = "El tipo de gasto es obligatorio.";
-    if (!is_numeric($valor) || $valor <= 0) $errores[] = "El valor debe ser un número positivo.";
+    if (empty($tipoGasto)) $errores[] = "El tipo de gasto es obligatorio.";
+    if (!is_numeric($valorGasto) || $valorGasto <= 0) $errores[] = "El valor debe ser un número positivo.";
 
     /**Si no hay errores, inserta los datos en bd */
     if (empty($errores)) {
-        $stmt = $pdo->prepare("INSERT INTO gastos (nombre, tipo, valor, fecha) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$nombre, $tipo, $valor, $fecha]);
+        $stmt = $pdo->prepare("INSERT INTO gastos (nombre, tipoGasto, valorGasto) VALUES (?, ?, ?)");
+        $stmt->execute([$nombre, $tipoGasto, $valorGasto]);
         header("Location: index.php?success=1");
         exit;
     }
@@ -74,7 +73,7 @@
                     <!-- Tipo -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Tipo de gasto</label>
-                        <select name="tipo" class="form-select form-select-lg rounded-3">
+                        <select name="tipoGasto" class="form-select form-select-lg rounded-3">
                             <option value="">Selecciona uno</option>
                             <option value="Alimentación">Alimentación</option>
                             <option value="Transporte">Transporte</option>
@@ -86,26 +85,20 @@
                             <option value="Otros">Otros</option>
                         </select>
                     </div>
-                    <form method="post">
                     
-                        <div class="mb-3">
-                            <label>Valor</label>
-                            <input type="number" name="valor" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Fecha</label>
-                            <input type="date" name="fecha" class="form-control" required>
-                        </div>
+                    <div class="mb-3">
+                        <label>Valor</label>
+                        <input type="number" name="valorGasto" class="form-control" required>
+                    </div>
 
-                        <!-- Botones -->
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary btn-lg px-4">Registrar</button>
-                            <a href="index.php" class="btn btn-outline-secondary btn-lg px-4">Volver</a>
-                        </div>
-                    </form>
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-primary btn-lg px-4">Registrar</button>
+                        <a href="index.php" class="btn btn-outline-secondary btn-lg px-4">Volver</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </body>
 </html>  
-    

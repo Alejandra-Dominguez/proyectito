@@ -1,16 +1,13 @@
 <?php
-$host = 'localhost';
-$db   = 'gastos_familiares';
-$user = 'root';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
+$host = "localhost";
+$db = "base"; 
+$usuario = "root";
+$password = "";
 
 try {
-    $pdo = new PDO($dsn, $user);
-} catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
+    $pdo = new PDO("mysql:host=localhost;dbname=$db", $usuario, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (Exception $e) {
+    die("Error: " . $e->getMessage());
 }
 ?>
-
