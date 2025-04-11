@@ -1,6 +1,7 @@
 <?php
 require 'db.php';
-/*Validaciones usando el codigoGasto*/ 
+
+/* Validaciones usando el codigoGasto */
 $codigoGasto = $_GET['codigoGasto'] ?? null;
 if (!$codigoGasto) die("Código de gasto inválido");
 
@@ -10,7 +11,7 @@ $gasto = $stmt->fetch();
 
 if (!$gasto) die("Gasto no encontrado");
 
-/*Confirma la acción del usuario y toma los datos del formulario*/ 
+/* Confirma la acción del usuario y toma los datos del formulario */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = $_POST['nombre'] ?? '';
     $tipoGasto = $_POST['tipoGasto'] ?? '';
@@ -18,9 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($nombre && $tipoGasto && is_numeric($valorGasto) && $valorGasto > 0) {
         $stmt = $pdo->prepare("UPDATE gastos SET nombre = ?, tipoGasto = ?, valorGasto = ? WHERE codigoGasto = ?");
-        /**sustituye los ? por los valores reales */
         $stmt->execute([$nombre, $tipoGasto, $valorGasto, $codigoGasto]);
-        /**redirecciona al usuario a index.php */
         header("Location: index.php?editado=1");
         exit;
     } else {
@@ -45,7 +44,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
         <div class="mb-3">
             <label>Tipo</label>
-            <input type="text" name="tipoGasto" class="form-control" value="<?= htmlspecialchars($gasto['tipoGasto']) ?>">
+            <select name="tipoGasto" class="form-select form-select-lg rounded-3">
+                            <option value="">Selecciona uno</option>
+                            <option value="Alimentación">Alimentación</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Salud">Salud</option>
+                            <option value="Entretenimiento">Entretenimiento</option>
+                            <option value="Impuestos">Impuestos</option>
+                            <option value="Viajes">Viajes</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Otros">Otros</option>
+                        </select>
         </div>
         <div class="mb-3">
             <label>Valor</label>
